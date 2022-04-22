@@ -4,12 +4,19 @@ import composePlugins from 'next-compose-plugins';
 import remarkGfm from 'remark-gfm';
 import rehypeSlug from 'rehype-slug';
 import { remarkCodeHike } from '@code-hike/mdx';
+import { createRequire } from 'module'; // Bring in the ability to create the 'require' method
+const require = createRequire(import.meta.url); // construct the require method
+const theme = require('shiki/themes/nord.json');
 
 const composedConfig = composePlugins([
   mdx({
     extension: /\.mdx?$/,
     options: {
-      remarkPlugins: [remarkFrontmatter, remarkGfm, [remarkCodeHike]],
+      remarkPlugins: [
+        remarkFrontmatter,
+        remarkGfm,
+        [remarkCodeHike, { theme }],
+      ],
       rehypePlugins: [rehypeSlug],
       providerImportSource: '@mdx-js/react',
     },
